@@ -273,6 +273,6 @@ CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 
 ## Контакты
 
-- Email: [cafe@uytnyugolok.ru](mailto:cafe@uytnyugolok.ru)
-- Telegram: [t.me/cafe_uytny_ugolok](https://t.me/cafe_uytny_ugolok)
+- Email: [Vaibron@yandex.ru](mailto:Vaibron@yandex.ru)
+- Telegram: [t.me/VaibronxX](https://t.me/VaibronxX)
 
