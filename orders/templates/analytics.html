@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% block title %}Аналитика | Жирная утка{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<style>
+    *:focus { outline: none !important; }
+    .analytics-container { max-width: 1000px; margin: 60px auto; padding: 0 20px; }
+    .analytics-box { background-color: #2b2b2b; border-radius: 15px; padding: 30px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3); }
+    .section-title { font-family: 'Playfair Display', serif; color: #e6d7a6; font-size: 2.2rem; text-align: center; margin-bottom: 25px; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); }
+    .analytics-form { margin-bottom: 30px; }
+    .form-line { display: flex; flex-wrap: nowrap; gap: 20px; justify-content: center; align-items: flex-end; }
+    .form-group { flex: 1 1 auto; min-width: 150px; margin: 0; }
+    .form-group.date-group { max-width: 130px; }
+    .form-group label { color: #e6d7a6; font-size: 0.9rem; margin-bottom: 5px; display: block; text-align: center; font-family: 'Roboto', sans-serif; }
+    .form-control, .flatpickr-input { background-color: #3b3b3b; border: 1px solid #e6d7a6; color: #fff; padding: 6px; border-radius: 6px; font-size: 0.9rem; width: 100%; transition: border-color 0.3s ease; box-sizing: border-box; height: 34px; font-family: 'Roboto', sans-serif; text-align: center; }
+    .form-control:disabled { background-color: #4b4b4b; color: #b8b8b8; }
+    .form-control:focus, .flatpickr-input:focus { border-color: #fff; box-shadow: 0 0 5px rgba(230, 215, 166, 0.3); }
+    .form-check { display: flex; align-items: center; background-color: #3b3b3b; border: 1px solid #e6d7a6; border-radius: 6px; height: 34px; padding: 8px 12px; width: 100%; box-sizing: border-box; justify-content: space-between; }
+    .form-check-input { margin: 0; width: 16px; height: 16px; cursor: pointer; flex-shrink: 0; order: 1; }
+    .form-check-label { color: #e6d7a6; font-size: 0.9rem; font-family: 'Roboto', sans-serif; white-space: nowrap; text-align: center; flex-grow: 1; order: 2; }
+    .btn-primary { font-family: 'Roboto', sans-serif; background-color: #e6d7a6; color: #2b2b2b; border: none; padding: 8px 20px; border-radius: 6px; transition: background-color 0.3s ease, transform 0.3s ease; font-size: 0.9rem; height: 34px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); flex-shrink: 0; }
+    .btn-primary:hover { background-color: #fff; transform: scale(1.05); }
+    .card { background-color: #3b3b3b; border: none; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); height: 120px; display: flex; flex-direction: column; justify-content: center; }
+    .card-body { padding: 15px; text-align: center; }
+    .card-title { font-family: 'Roboto', sans-serif; color: #e6d7a6; font-size: 1.2rem; margin-bottom: 10px; }
+    .card-text { color: #fff; font-size: 1.5rem; font-weight: bold; }
+    .table { background-color: #3b3b3b; color: #b8b8b8; border-radius: 10px; overflow: hidden; margin: 0 auto; width: 70%; }
+    .table th { background-color: #4b4b4b; color: #e6d7a6; font-family: 'Roboto', sans-serif; border: none; padding: 10px; text-align: center; font-size: 1rem; }
+    .table td { border: none; padding: 10px; text-align: center; font-size: 0.9rem; }
+    .table tbody tr:hover { background-color: #4b4b4b; }
+    .icon { margin-right: 6px; }
+    h3 { font-family: 'Playfair Display', serif; color: #e6d7a6; font-size: 1.5rem; margin: 25px 0; text-align: center; }
+    h4 { font-family: 'Playfair Display', serif; color: #e6d7a6; font-size: 1.3rem; margin-top: 25px; text-align: center; }
+    .flatpickr-calendar { background-color: #2b2b2b; border: 1px solid #e6d7a6; border-radius: 10px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5); color: #e6d7a6; font-family: 'Roboto', sans-serif; width: 280px; }
+    .flatpickr-day { color: #b8b8b8; border-radius: 5px; font-size: 0.9rem; }
+    .flatpickr-day:hover, .flatpickr-day:focus { background-color: #3b3b3b; border-color: #e6d7a6; }
+    .flatpickr-day.selected, .flatpickr-day.selected:hover { background-color: #e6d7a6; color: #2b2b2b; border-color: #e6d7a6; }
+    .flatpickr-day.today { border: 1px solid #e6d7a6; color: #fff; }
+    .flatpickr-month, .flatpickr-current-month, .flatpickr-weekdays { background-color: #2b2b2b; color: #e6d7a6; }
+    .flatpickr-weekday { color: #e6d7a6; font-weight: bold; font-size: 0.9rem; }
+    .flatpickr-prev-month, .flatpickr-next-month { color: #e6d7a6; font-size: 1rem; }
+    .flatpickr-prev-month:hover, .flatpickr-next-month:hover { color: #fff; }
+</style>
+
+<div class="analytics-container">
+    <div class="analytics-box">
+        <h2 class="section-title"><i class="fas fa-chart-line icon"></i>Аналитика</h2>
+
+        <form method="GET" action="{% url 'analytics' %}" class="analytics-form">
+            <div class="form-line">
+                <div class="form-group date-group">
+                    <label for="start_date"><i class="fas fa-calendar-alt icon"></i>Начальная дата:</label>
+                    <input type="text" name="start_date" id="start_date" value="{{ start_date }}" class="flatpickr-input date-field" {% if show_all_time %}disabled{% endif %}>
+                </div>
+                <div class="form-group date-group">
+                    <label for="end_date"><i class="fas fa-calendar-alt icon"></i>Конечная дата:</label>
+                    <input type="text" name="end_date" id="end_date" value="{{ end_date }}" class="flatpickr-input date-field" {% if show_all_time %}disabled{% endif %}>
+                </div>
+                <div class="form-group">
+                    <label for="all_time" style="visibility: hidden;">Чекбокс</label>
+                    <div class="form-check">
+                        <input type="checkbox" name="all_time" id="all_time" value="true" class="form-check-input" {% if show_all_time %}checked{% endif %} onchange="toggleDateFields()">
+                        <span class="form-check-label">За всё время</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="status"><i class="fas fa-filter icon"></i>Статус заказов:</label>
+                    <select name="status" id="status" class="form-control">
+                        <option value="">Все статусы</option>
+                        {% for value, label in status_choices %}
+                            <option value="{{ value }}" {% if status_filter == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-check icon"></i>Применить</button>
+            </div>
+        </form>
+
+        <h3>Период: {{ date_range_label }}</h3>
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Общая выручка</h5>
+                        <p class="card-text">{{ total_revenue }} руб.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Количество заказов</h5>
+                        <p class="card-text">{{ total_orders }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Количество клиентов</h5>
+                        <p class="card-text">{{ total_clients }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h4>Популярные блюда</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Блюдо</th>
+                    <th>Количество</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in popular_items %}
+                <tr>
+                    <td>{{ item.menu_item__name }}</td>
+                    <td>{{ item.total }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="2">Нет данных</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    flatpickr("#start_date", { dateFormat: "Y-m-d", maxDate: "today", defaultDate: "{{ start_date }}" });
+    flatpickr("#end_date", { dateFormat: "Y-m-d", maxDate: "today", defaultDate: "{{ end_date }}" });
+
+    function toggleDateFields() {
+        const allTimeCheckbox = document.getElementById('all_time');
+        const startDate = document.getElementById('start_date');
+        const endDate = document.getElementById('end_date');
+
+        if (!startDate.dataset.originalValue) {
+            startDate.dataset.originalValue = startDate.value;
+        }
+        if (!endDate.dataset.originalValue) {
+            endDate.dataset.originalValue = endDate.value;
+        }
+
+        if (allTimeCheckbox.checked) {
+            startDate.value = '';
+            endDate.value = '';
+            startDate.disabled = true;
+            endDate.disabled = true;
+        } else {
+            startDate.value = startDate.dataset.originalValue || '';
+            endDate.value = endDate.dataset.originalValue || '';
+            startDate.disabled = false;
+            endDate.disabled = false;
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', toggleDateFields);
+</script>
+{% endblock %}
