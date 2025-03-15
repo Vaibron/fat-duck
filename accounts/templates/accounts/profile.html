@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Кабинет | Жирная утка{% endblock %}
+{% block content %}
+<style>
+    .auth-container { display: flex; justify-content: center; align-items: center; padding: 40px 20px; }
+    .auth-box { background-color: #2b2b2b; border-radius: 15px; padding: 40px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3); width: 100%; max-width: 800px; }
+    .auth-title { font-family: 'Playfair Display', serif; text-align: center; color: #e6d7a6; font-size: 2.5rem; margin-bottom: 30px; }
+    .auth-box p { color: #b8b8b8; font-size: 1.2rem; margin-bottom: 20px; }
+    .btn-primary { background-color: #e6d7a6; color: #2b2b2b; padding: 12px; border-radius: 10px; font-size: 1.2rem; border: none; width: 100%; transition: background-color 0.3s ease; margin-bottom: 10px; }
+    .btn-primary:hover { background-color: #fff; }
+    .btn-danger { background-color: #dc3545; color: #fff; padding: 8px 16px; border-radius: 10px; font-size: 1rem; border: none; transition: background-color 0.3s ease; }
+    .btn-danger:hover { background-color: #c82333; }
+    .admin-buttons { display: flex; flex-direction: column; gap: 10px; }
+</style>
+
+<div class="auth-container">
+    <div class="auth-box">
+        <h2 class="auth-title">Ваш кабинет</h2>
+        <p>Добро пожаловать, {{ user.username }}!</p>
+        <p>Email: {{ user.email }}</p>
+
+        {% if user.is_staff %}
+            <div class="admin-buttons">
+                <a href="{% url 'order_list' %}" class="btn btn-primary">Все заказы</a>
+                <a href="{% url 'create_order' %}" class="btn btn-primary">Создать заказ</a>
+                <a href="{% url 'booking_list' %}" class="btn btn-primary">Все бронирования</a>
+                <a href="{% url 'book_table' %}" class="btn btn-primary">Создать бронирование</a>
+                <a href="{% url 'analytics' %}" class="btn btn-primary">Аналитика</a>
+                <a href="/admin/orders/menuitem/add/" class="btn btn-primary">Добавить блюдо</a>
+            </div>
+        {% else %}
+            <div class="admin-buttons">
+                <a href="{% url 'booking_list' %}" class="btn btn-primary">Мои бронирования</a>
+                <a href="{% url 'book_table' %}" class="btn btn-primary">Забронировать столик</a>
+            </div>
+        {% endif %}
+
+        <form method="POST" action="{% url 'logout' %}" class="mt-3">
+            {% csrf_token %}
+            <button type="submit" class="btn-primary">Выйти</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
