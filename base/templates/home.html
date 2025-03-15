@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+
+{% block title %}Ресторан "Жирная утка"{% endblock %}
+
+{% block content %}
+<style>
+    .hero {
+        position: relative;
+        margin-bottom: 40px;
+    }
+
+    .cafe-image {
+        border-radius: 20px;
+        object-fit: cover;
+        width: 100%;
+        height: 500px;
+        filter: brightness(70%);
+    }
+
+    .hero-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        color: #fff;
+        font-family: 'Playfair Display', serif;
+    }
+
+    .hero-text h1 {
+        font-size: 48px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .hero-text p {
+        font-size: 20px;
+        font-weight: 300;
+    }
+
+    .feature-card {
+        border-radius: 15px;
+        background-color: #2b2b2b;
+        padding: 30px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s ease;
+        height: 300px;
+        width: 250px;
+        margin: 0 15px 30px;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-10px);
+    }
+
+    .feature-icon {
+        font-size: 3rem;
+        color: #e6d7a6;
+        margin-bottom: 20px;
+    }
+
+    .feature-card h5 {
+        font-family: 'Playfair Display', serif;
+        color: #e6d7a6;
+        font-size: 1.5rem;
+    }
+
+    .feature-card p {
+        color: #b8b8b8;
+        font-size: 1rem;
+    }
+
+    .features-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 30px;
+    }
+
+    .visit-us {
+        background-color: #2b2b2b;
+        padding: 60px 30px;
+        border-radius: 20px;
+        margin-top: 60px;
+        text-align: center;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .visit-us h3 {
+        font-family: 'Playfair Display', serif;
+        color: #e6d7a6;
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+    }
+
+    .visit-us p {
+        color: #b8b8b8;
+        font-size: 1.2rem;
+        margin-bottom: 40px;
+    }
+
+    .visit-us .btn {
+        background-color: #e6d7a6;
+        color: #2b2b2b;
+        font-size: 1.2rem;
+        padding: 12px 30px;
+        border-radius: 10px;
+        transition: background-color 0.3s ease;
+    }
+
+    .visit-us .btn:hover {
+        background-color: #fff;
+        color: #2b2b2b;
+    }
+</style>
+
+<div class="hero">
+    <img class="cafe-image img-fluid" src="{{ MEDIA_URL }}images/cafe_front.jpg" alt="Ресторан 'Жирная утка'">
+    <div class="hero-text">
+        <h1>Жирная утка</h1>
+        <p>Изысканная кухня и непревзойденная атмосфера</p>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <h2 class="text-center mb-5" style="font-family: 'Playfair Display', serif; font-size: 2.5rem;">Добро пожаловать</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <h4 style="font-family: 'Playfair Display', serif; font-size: 1.8rem;">О ресторане</h4>
+            <p style="color: #b8b8b8;">"Жирная утка" — это место, где элегантность встречается с гастрономией. Мы предлагаем изысканные блюда из свежайших ингредиентов в атмосфере роскоши и уюта.</p>
+        </div>
+        <div class="col-md-6">
+            <h4 style="font-family: 'Playfair Display', serif; font-size: 1.8rem;">Наши преимущества</h4>
+            <ul style="color: #b8b8b8;">
+                <li>Исключительный сервис премиум-класса.</li>
+                <li>Авторское меню от шеф-повара.</li>
+                <li>Изысканный интерьер с панорамными видами.</li>
+                <li>Винная карта мирового уровня.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <h3 class="text-center mb-4" style="font-family: 'Playfair Display', serif; font-size: 2rem;">Почему мы</h3>
+            <div class="features-container">
+                <div class="feature-card text-center">
+                    <i class="fas fa-wine-glass feature-icon"></i>
+                    <h5>Изысканные напитки</h5>
+                    <p>Коллекция вин и коктейлей (Ягуар, Блейзер, Фунфырики).</p>
+                </div>
+                <div class="feature-card text-center">
+                    <i class="fas fa-utensils feature-icon"></i>
+                    <h5>Гастрономия</h5>
+                    <p>Блюда от лучших шефов (Доширак с сосисочками, Чебупельки с мазиком, Кубик Галина Бланка)</p>
+                </div>
+                <div class="feature-card text-center">
+                    <i class="fas fa-star feature-icon"></i>
+                    <h5>Премиум-сервис</h5>
+                    <p>Безупречное обслуживание. Возможность сыграть с официанткой на раздевание. </p>
+                </div>
+                <div class="feature-card text-center">
+                    <i class="fas fa-chair feature-icon"></i>
+                    <h5>Роскошный интерьер</h5>
+                    <p>Стиль и комфорт. (Ковры как у бабки, мебель с блошинного рынка) </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="visit-us">
+        <h3>Забронируйте столик</h3>
+        <p>Присоединяйтесь к нам и откройте мир высокой кухни. Войдите или зарегистрируйтесь для бронирования.</p>
+        {% if user.is_authenticated %}
+            <a href="{% url 'profile' %}" class="btn">В кабинет</a>
+        {% else %}
+            <a href="{% url 'login' %}" class="btn">Войти</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

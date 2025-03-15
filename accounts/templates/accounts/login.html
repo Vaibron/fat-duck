@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Вход | Уютный уголок{% endblock %}
+
+{% block content %}
+<style>
+    .auth-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px 20px;
+    }
+
+    .auth-box {
+        background-color: #2b2b2b;
+        border-radius: 15px;
+        padding: 40px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        width: 100%;
+        max-width: 600px;
+    }
+
+    .auth-title {
+        font-family: 'Playfair Display', serif;
+        text-align: center;
+        color: #e6d7a6;
+        font-size: 2.5rem;
+        margin-bottom: 30px;
+    }
+
+    .auth-form .form-group {
+        margin-bottom: 20px;
+    }
+
+    .auth-form label {
+        color: #e6d7a6;
+        font-size: 1.1rem;
+    }
+
+    .auth-form input {
+        background-color: #3b3b3b;
+        border: 1px solid #e6d7a6;
+        color: #fff;
+        padding: 12px;
+        border-radius: 10px;
+        font-size: 1rem;
+        width: 100%;
+    }
+
+    .auth-form input:focus {
+        outline: none;
+        border-color: #fff;
+        box-shadow: 0 0 5px rgba(230, 215, 166, 0.5);
+    }
+
+    .auth-form .btn-primary {
+        background-color: #e6d7a6;
+        color: #2b2b2b;
+        padding: 12px;
+        border-radius: 10px;
+        font-size: 1.2rem;
+        border: none;
+        width: 100%;
+        transition: background-color 0.3s ease;
+    }
+
+    .auth-form .btn-primary:hover {
+        background-color: #fff;
+    }
+
+    .auth-link {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .auth-link a {
+        color: #e6d7a6;
+        font-size: 1.1rem;
+    }
+
+    .auth-link a:hover {
+        color: #fff;
+        text-decoration: underline;
+    }
+
+    .errors {
+        color: #ff6b6b;
+        font-size: 0.9rem;
+    }
+</style>
+
+<div class="auth-container">
+    <div class="auth-box">
+        <h2 class="auth-title">Вход</h2>
+        <form method="POST" class="auth-form">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            <div class="form-group">
+                <label for="id_username">Логин</label>
+                <input type="text" name="username" id="id_username" value="{{ form.username.value|default:'' }}" required>
+                {% if form.username.errors %}
+                    <div class="errors">{{ form.username.errors }}</div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <label for="id_password">Пароль</label>
+                <input type="password" name="password" id="id_password" required>
+                {% if form.password.errors %}
+                    <div class="errors">{{ form.password.errors }}</div>
+                {% endif %}
+            </div>
+            <button type="submit" class="btn-primary">Войти</button>
+        </form>
+        <div class="auth-link">
+            <p>Нет аккаунта? <a href="{% url 'register' %}">Регистрация</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

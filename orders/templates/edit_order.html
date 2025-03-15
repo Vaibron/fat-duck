@@ -1,0 +1,102 @@
+<!-- orders/templates/edit_order.html -->
+{% extends "base.html" %}
+{% block title %}Редактировать заказ #{{ order.id }} | Жирная утка{% endblock %}
+{% block content %}
+<style>
+    *:focus { outline: none !important; }
+    .auth-container { max-width: 800px; margin: 60px auto; padding: 0 20px; }
+    .auth-box { background-color: #2b2b2b; border-radius: 15px; padding: 40px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3); }
+    .auth-title { font-family: 'Playfair Display', serif; color: #e6d7a6; font-size: 2.5rem; text-align: center; margin-bottom: 30px; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); }
+    .form-group { margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; background-color: #3b3b3b; padding: 15px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); transition: transform 0.3s ease; }
+    .form-group:hover { transform: translateY(-3px); }
+    .form-group label { color: #e6d7a6; font-size: 1.1rem; margin: 0; flex: 1; }
+    .quantity-control { display: flex; align-items: center; background-color: #2b2b2b; border: 1px solid #e6d7a6; border-radius: 8px; overflow: hidden; }
+    .quantity-control button { background-color: #e6d7a6; color: #2b2b2b; border: none; padding: 8px 12px; font-size: 1rem; cursor: pointer; transition: background-color 0.3s ease; }
+    .quantity-control button:hover { background-color: #fff; }
+    .quantity-control input { background-color: #2b2b2b; border: none; color: #fff; width: 50px; text-align: center; padding: 8px 0; font-size: 1rem; -webkit-appearance: none; -moz-appearance: textfield; appearance: none; }
+    .quantity-control input::-webkit-inner-spin-button, .quantity-control input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    .btn-primary { font-family: 'Roboto', sans-serif; background-color: #e6d7a6; color: #2b2b2b; border: none; padding: 12px 25px; border-radius: 10px; transition: background-color 0.3s ease, transform 0.3s ease; margin-right: 10px; }
+    .btn-primary:hover { background-color: #fff; transform: scale(1.05); }
+    .btn-secondary { font-family: 'Roboto', sans-serif; background-color: #3b3b3b; color: #e6d7a6; border: 1px solid #e6d7a6; padding: 12px 25px; border-radius: 10px; transition: background-color 0.3s ease, transform 0.3s ease; }
+    .btn-secondary:hover { background-color: #4b4b4b; color: #fff; transform: scale(1.05); }
+    .icon { margin-right: 8px; }
+    .error { color: #d9534f; font-size: 0.9rem; margin-top: 5px; }
+    .category-section { margin-bottom: 40px; }
+    .category-title { font-family: 'Playfair Display', serif; color: #e6d7a6; font-size: 1.8rem; margin-bottom: 20px; text-align: left; }
+</style>
+
+<div class="auth-container">
+    <div class="auth-box">
+        <h2 class="auth-title"><i class="fas fa-edit icon"></i>Редактировать заказ #{{ order.id }}</h2>
+        <form method="POST" class="auth-form">
+            {% csrf_token %}
+            {% if user.is_staff %}
+                <div class="form-group">
+                    <label for="{{ form.table_number.id_for_label }}">Номер стола</label>
+                    <div class="quantity-control">
+                        <button type="button" class="decrease">-</button>
+                        {{ form.table_number }}
+                        <button type="button" class="increase">+</button>
+                    </div>
+                </div>
+                {% if form.table_number.errors %}
+                    <div class="error">{{ form.table_number.errors }}</div>
+                {% endif %}
+            {% endif %}
+
+            <div class="menu-items">
+                {% for category in categories %}
+                    <div class="category-section">
+                        <h3 class="category-title">{{ category.name }}</h3>
+                        {% for field in form %}
+                            {% if field.name != 'table_number' and field.field.widget.attrs.data_category == category.name %}
+                                <div class="form-group">
+                                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                    <div class="quantity-control">
+                                        <button type="button" class="decrease">-</button>
+                                        {{ field }}
+                                        <button type="button" class="increase">+</button>
+                                    </div>
+                                </div>
+                                {% if field.errors %}
+                                    <div class="error">{{ field.errors }}</div>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <button type="submit" class="btn-primary"><i class="fas fa-save icon"></i>Сохранить</button>
+            <a href="{% url 'order_list' %}" class="btn btn-secondary"><i class="fas fa-times icon"></i>Отмена</a>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('.quantity-control').forEach(control => {
+        const input = control.querySelector('input');
+        const decreaseBtn = control.querySelector('.decrease');
+        const increaseBtn = control.querySelector('.increase');
+        const minValue = input.name.includes('table_number') ? 1 : 0;
+        const maxValue = input.name.includes('table_number') ? 20 : Infinity;
+
+        decreaseBtn.addEventListener('click', () => {
+            let value = parseInt(input.value) || minValue;
+            if (value > minValue) input.value = value - 1;
+        });
+
+        increaseBtn.addEventListener('click', () => {
+            let value = parseInt(input.value) || minValue;
+            if (value < maxValue) input.value = value + 1;
+        });
+
+        input.addEventListener('input', () => {
+            input.value = input.value.replace(/[^0-9]/g, '');
+            let value = parseInt(input.value) || minValue;
+            if (value < minValue) input.value = minValue;
+            if (value > maxValue) input.value = maxValue;
+        });
+    });
+</script>
+{% endblock %}
