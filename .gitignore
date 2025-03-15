@@ -1,0 +1,22 @@
+# Виртуальное окружение
+.venv/
+venv/
+env/
+
+# Исключаем все папки с миграциями
+*/migrations/
+
+# База данных
+#db.sqlite3
+
+# Временные файлы Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+
+# PyCharm/IDEA
+.idea/
+*.iml
